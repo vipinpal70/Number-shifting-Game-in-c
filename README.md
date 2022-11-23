@@ -1,6 +1,6 @@
 # Number-shifting-Game-in-c
 
-This is a mini game developed in c language for Linux environment.
+This is a mini game developed in c language for Windows environment.
 
 There is a 4 by 4 matrix , 15 numbers in the range from 1 to 15 are randomly filled in the given 4 by 4 matrix, and 1 position is empty.So you can move numbers to empty position ONLY 1 at time. For each valid move your total number of given moves will decease by 1. Initially you are provided 400 move.So you have to win within this move.
 
