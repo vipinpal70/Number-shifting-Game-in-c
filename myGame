@@ -1,5 +1,13 @@
-//How to compile : gcc -o game myGame.c -lcurses
+//1. TO RUN FROM COMMAND LINE
+//How to compile : gcc -o game myGame.c
 // how to run: ./game
+
+//2. TO RUN IN CODE BLOCKS OR SOME OTHER IDE
+// GOT TO DEBUG SECTION AND
+// compile & run
+
+// shortcut in codeblocks to directly run
+// F9
 
 // header files
 #include<stdio.h>
@@ -7,16 +15,12 @@
 #include<math.h>
 #include<time.h>
 #include<string.h>
+#include<windows.h>
 
-//#include<ncurses.h>
-#include<curses.h>        //  for getch() equivalent in linux 
-
-// own heder files 
-#include"getchInLinux.h" // contain definition of getch() equivalent in linux i.e getchInLinux()
 
 // create matrix 4*4
 void  createMatrix(int arr[][4])
-{   
+{
     int n=15;
     int num[n],i,j;
     for(i=0;i<15;i++)        // These 1-15 number will be in th matrix
@@ -28,14 +32,14 @@ void  createMatrix(int arr[][4])
 
     for(i=0;i<4;i++)
     for(j=0;j<4;j++)
-  {  
+  {
     if(lastIndex>=0)
-    {  index=rand()%(lastIndex+1); // idea : performing % operation by (lastIndex+1) 
+    {  index=rand()%(lastIndex+1); // idea : performing % operation by (lastIndex+1)
        arr[i][j]=num[index];       // will give index , so put that num[index] number in matrix
-       num[index]=num[lastIndex--]; // and replace last number with this indexed positioned number 
-    }                               // and finally lastIndex--  
+       num[index]=num[lastIndex--]; // and replace last number with this indexed positioned number
+    }                               // and finally lastIndex--
   }
-       arr[i-1][j-1]=0;          // last number is zero 
+       arr[i-1][j-1]=0;          // last number is zero
 
 }
 
@@ -43,19 +47,19 @@ void  createMatrix(int arr[][4])
 void showMatrix(int arr[][4])
 {
     int i,j;
-    printf("----------------------\n");
+    printf("--------------------\n");
     for(i=0;i<4;i++)
-   { printf("༏  ");
+   { printf("|");
        for(j=0;j<4;j++)
     {   if(arr[i][j]!=0)
-        printf("%-2d ༏ ",arr[i][j]);
+        printf("%-2d | ",arr[i][j]);
         else
-        printf("   ༏ ");
+        printf("   | ");
     }
     printf("\n");
    }
 
-    printf("----------------------\n");
+    printf("--------------------\n");
 }
 
 // winning check by this function
@@ -71,32 +75,30 @@ int winner(int arr[][4])
    }
         if(j<4)
         return 0;
-        return 1;    
+        return 1;
 }
 
-// swap function to swap two numbers 
+// swap function to swap two numbers
 void swap(int *x,int *y)
 {
     *x=*x+*y;
     *y=*x-*y;
     *x=*x-*y;
-    printf("\a\a\a");
+    printf("");
 }
 
 // Reads the user input character and return ascii value of that
-int readEnteredKey()  
+int readEnteredKey()
 {
         char c;
-            c = getchInLinux();
-            if(c==27 || c==91)       // this is just for scan code 
-         {  c = getchInLinux();
-             if(c==27 || c==91)     // also for scan code 
-              c=getchInLinux();
-         }
+            c=_getch();
+            if(c==-32)
+            c=_getch();
+
     return c;
 }
 
-// shift up function 
+// shift up function
 int shiftUp(int arr[][4])
 {
     int i,j;
@@ -106,12 +108,12 @@ int shiftUp(int arr[][4])
             if(arr[i][j]==0)
             break;
         if(j<4)
-        break; 
+        break;
     }
       if(i==3)                 // shifting not possible
         return 0;
         swap(&arr[i][j],&arr[i+1][j]);
-        return 1;               // shift up success   
+        return 1;               // shift up success
 }
 
 int shiftDown(int arr[][4])
@@ -123,13 +125,13 @@ int shiftDown(int arr[][4])
             if(arr[i][j]==0)
             break;
         if(j<4)
-        break; 
+        break;
     }
       if(i==0)                 // shifting not possible
         return 0;
-         swap(&arr[i][j],&arr[i-1][j]);    // swap numbers 
+         swap(&arr[i][j],&arr[i-1][j]);    // swap numbers
 
-        return 1;               // shift up success   
+        return 1;               // shift up success
 }
 
 int shiftRight(int arr[][4])
@@ -141,13 +143,13 @@ int shiftRight(int arr[][4])
             if(arr[i][j]==0)
             break;
         if(j<4)
-        break; 
+        break;
     }
       if(j==0)                 // shifting not possible
         return 0;
              swap(&arr[i][j],&arr[i][j-1]);
 
-        return 1;               // shift up success   
+        return 1;               // shift up success
 }
 
 int shiftLeft(int arr[][4])
@@ -159,19 +161,19 @@ int shiftLeft(int arr[][4])
             if(arr[i][j]==0)
             break;
         if(j<4)
-        break; 
+        break;
     }
       if(j==3)                 // shifting not possible
         return 0;
                 swap(&arr[i][j],&arr[i][j+1]);
-        return 1;               // shift up success   
+        return 1;               // shift up success
 }
 
-// Game rules 
+// Game rules
 void gameRule(int arr[][4])
 {
-    system("clear");
-    int x=readEnteredKey();
+    system("cls");
+ //   int x=readEnteredKey();
     int i,j,k=1;
     printf("                 RULE OF THIS GAME                 \n");
     printf("\n1.You can move only 1 step at a time by arrow key ");
@@ -187,58 +189,58 @@ void gameRule(int arr[][4])
     printf("number in a 4*4 matrix should be in order from 1 to 15 ");
     printf("\n\n            winning situation:         \n");
 
-    printf("----------------------\n");
+    printf("---------------------\n");
     for(i=0;i<4;i++)
-   { printf("༏  ");
+   { printf("| ");
        for(j=0;j<4;j++)
     {   if(arr[i][j]!=0)
-        printf("%-2d ༏ ",4*i+j+1);
+        printf("%-2d | ",4*i+j+1);
         else
-        printf("   ༏ ");
+        printf("   |");
     }
     printf("\n");
    }
 
-    printf("----------------------\n");
+    printf("---------------------\n");
     printf("\n5.You can exit the game at any time by pressing 'E' or 'e' ");
 
 
     printf("\nSo Try to win in minimum no of move \n");
     printf("\n         Happy gaming , Good Luck\n");
 
-    printf("\nEnter any key to start.....  🆗 : ");
-    x=readEnteredKey();
+    printf("\nEnter any key to start.....   ");
+   int x=readEnteredKey();
 }
 
-// main function 
+// main function
 int main()
 {
     int arr[4][4];        // matrix
-    int maxTry=400;       // maximum move  
+    int maxTry=400;       // maximum move
     char name[20];
-   system("clear");        // to clear screen
+   system("cls");        // to clear screen
 
     printf("Enter Your Good Name: ");
     scanf("%s",name);
 
        while(1)
-    {             createMatrix(arr);    // calling funcn to create  matrix 
-                  gameRule(arr);       // game rule function calling 
+    {             createMatrix(arr);    // calling funcn to create  matrix
+                  gameRule(arr);       // game rule function calling
 
-          while(!winner(arr))     // checking for winning situation 
-        {   
-               system("clear");
-               if(!maxTry)        // for remaing zero move 
+          while(!winner(arr))     // checking for winning situation
+        {
+               system("cls");
+               if(!maxTry)        // for remaing zero move
                 break;
 
                printf("\n\n  welcome  %s  ,  Move remaining : %d\n\n",name,maxTry);
 
-              showMatrix(arr);      // show matrix 
+              showMatrix(arr);      // show matrix
 
 
-            int key=readEnteredKey();   // this will return ascii code of user entered key 
+            int key=readEnteredKey();   // this will return ascii code of user entered key
 
-        switch(key)          // maping 
+        switch(key)          // maping
         {
             case 69:                  // ascii of E
 
@@ -246,34 +248,35 @@ int main()
                         printf("\a\a\a\a\a\a\n     Thanks for Playing ! \n\a");
                         printf("\nHit 'Enter' to exit the game \n");
                         key=readEnteredKey();
-                        exit(0);               
+                        exit(0);
 
 
-            case 65:          // arrow up
+            case 72:          // arrow up
                         if(shiftUp(arr))
                         maxTry--;
                         break;
-            case 66:          // arrow down
+            case 80:          // arrow down
                         if(shiftDown(arr))
                         maxTry--;
                         break;
-            case 67:            // arrow  right
+            case 77:            // arrow  right
                         if(shiftRight(arr))
                         maxTry--;
                         break;
-            case 68:             // arrow left
+            case 75:             // arrow left
                         if(shiftLeft(arr))
                         maxTry--;
                         break;
             default:
 
-                       printf("\n\n      \a\a❌ Not Allowed \a\a\a\a");
+                       printf("\n\n      \a\a Not Allowed \a");
+                     //  delay(200);
         }
 
         }
         if(!maxTry)
          printf("\n\a          YOU LOSE !          \a\a\n");
-         else 
+         else
          { printf("\n\a!!!!!!!!!!!!!Congratualization !!!!!!!!!!!!!\n\a");
            printf("\a               You have Won      \a\a\a ");
          }
@@ -282,8 +285,8 @@ int main()
         printf("enter 'y' to play again:  ");
         scanf("%c",&check);
         if(check!='y' && check!='Y')
-            break; 
-        maxTry=400;    
-    }        
+            break;
+        maxTry=400;
+    }
     return 0;
 }
